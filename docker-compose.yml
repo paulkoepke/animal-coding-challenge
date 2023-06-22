@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  animal-service:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/animaldb
+      - SPRING_DATASOURCE_USERNAME=animaldb-user
+      - SPRING_DATASOURCE_PASSWORD=animaldb-pw
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  postgres:
+    image: "postgres:latest"
+    restart: always
+    environment:
+      POSTGRES_USER: animaldb-user
+      POSTGRES_PASSWORD: animaldb-pw
+      POSTGRES_DB: animaldb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
